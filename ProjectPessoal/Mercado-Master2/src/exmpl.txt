@@ -1,0 +1,26 @@
+import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm'; // <-- 1. Importa o TypeOrmModule
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+import { FornecedoresModule } from './fornecedores/fornecedores.module'; // <-- 2. Importa nosso módulo de fornecedores
+import { Fornecedor } from './fornecedores/entities/fornecedor.entity'; // <-- 3. Importa nossa entidade
+
+@Module({
+  imports: [
+    // 4. Configuração da conexão com o banco de dados PostgreSQL
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: 'localhost',
+      port: 5432,
+      username: 'postgres',
+      password: '1234', // <-- MUDE AQUI PARA A SENHA QUE VOCÊ CRIOU
+      database: 'hortifruti_db',
+      entities: [Fornecedor], // Lista todas as entidades do projeto
+      synchronize: true, // Em desenvolvimento, mantém o banco sincronizado com as entidades. Não use em produção.
+    }),
+    FornecedoresModule, // <-- 5. Registra o módulo de fornecedores na aplicação
+  ],
+  controllers: [AppController],
+  providers: [AppService],
+})
+export class AppModule {}
